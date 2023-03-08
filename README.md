@@ -1,1 +1,1 @@
-# fantasyfootballbackendgroup
+# fantasy-football-app-back-end
