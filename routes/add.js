@@ -23,7 +23,7 @@ app.post("/", async (req, res) => {
   if (results.affectedRows === 1) {
     await asyncMySQL(insertFantasy(), [results.insertId]);
     res.send({ status: 1 });
-    // sendEmail(email, welcomeEmail(name).subject, welcomeEmail().content);
+    sendEmail(email, welcomeEmail(name).subject, welcomeEmail().content);
   } else {
     res.send({ status: 0, error: "Duplicate user!" });
   }

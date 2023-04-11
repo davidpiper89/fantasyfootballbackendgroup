@@ -16,9 +16,9 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
-// app.use(limiter);
+app.use(limiter);
 
-// app.use(helmet());
+app.use(helmet());
 
 app.use(cookieParser());
 
