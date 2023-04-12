@@ -54,6 +54,7 @@ app.use(
   require("./routes/notificationEmails.js")
 );
 app.use("/save", auth, require("./routes/save"));
+app.use("/points", auth, require("./routes/points"))
 
 const port = process.env.PORT || 6001;
 app.listen(port, () => {

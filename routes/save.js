@@ -24,9 +24,12 @@ app.post("/", checkTokenHeader, async (req, res) => {
     );
 
     await asyncMySQL(`INSERT INTO fantasy
-                        (user_id, team_name, score_deduction)
+                        (user_id, team_name, score_deduction, total_points)
                          VALUES
-                          (?, ?, ?)`, [req.user_id, payload.teamName, payload.scoreDeduction]);
+                          (?, ?, ?, ?)`, [req.user_id, payload.teamName, payload.scoreDeduction, Math.abs(payload.scoreDeduction)]);
+
+
+    console.log(Math.abs(payload.scoreDeduction));
 
     res.send({ status: 1 });
   } catch (error) {

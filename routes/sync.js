@@ -41,11 +41,11 @@ app.get("/", async (req, res) => {
 
   //get the userTable
   const fantasyTable = await asyncMySQL(
-    `SELECT team_name, total_points FROM fantasy`
+    `SELECT team_name, score_deduction, total_points FROM fantasy`
   );
 
   //send all the data
-  res.send({ status: 1, user, scoreDeduction, selectedTeam, fantasyTable });
+  res.send({ status: 1, user, selectedTeam, fantasyTable });
 });
 
 module.exports = app;

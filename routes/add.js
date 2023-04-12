@@ -21,7 +21,6 @@ app.post("/", async (req, res) => {
   // res.send({ t: 5, results });
 
   if (results.affectedRows === 1) {
-    await asyncMySQL(insertFantasy(), [results.insertId]);
     res.send({ status: 1 });
     sendEmail(email, welcomeEmail(name).subject, welcomeEmail().content);
   } else {

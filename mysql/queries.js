@@ -87,10 +87,6 @@ module.exports = {
     WHERE email = ?;`;
   },
 
-  insertFantasy: () => {
-    return `INSERT INTO fantasy (team_name, user_id)
-    VALUES("", ?)`;
-  },
 
   selectUser: () => {
     return `SELECT email, 
