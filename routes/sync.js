@@ -11,17 +11,17 @@ app.get("/", async (req, res) => {
   //convert into bool
   user.notificationEmails = user.notificationEmails === 1 ? true : false;
 
-  const [fantasy] = await asyncMySQL(selectFantasy(), [req.user_id]);
+  // const [fantasy] = await asyncMySQL(selectFantasy(), [req.user_id]);
 
-  //attach team name to fantasy and place inside users
-  user.fantasy = { teamName: fantasy.teamName };
+  // //attach team name to fantasy and place inside users
+  // user.fantasy = { teamName: fantasy.teamName };
 
   //get latest player data
   const footballData = await axios.get(
     "https://fantasy.premierleague.com/api/bootstrap-static/"
   );
 
-  //get the user line up
+  // get the user line up
   const lineUp = await asyncMySQL(`SELECT code FROM line_up
                                     WHERE user_id = ${req.user_id}`);
 
@@ -39,8 +39,13 @@ app.get("/", async (req, res) => {
   const scoreDeduction = await asyncMySQL(`SELECT score_deduction FROM fantasy
                                             WHERE user_id = ${req.user_id}`);
 
+  //get the userTable
+  const fantasyTable = await asyncMySQL(
+    `SELECT team_name, total_points FROM fantasy`
+  );
+
   //send all the data
-  res.send({ status: 1, user, selectedTeam, scoreDeduction });
+  res.send({ status: 1, user, scoreDeduction, selectedTeam, fantasyTable });
 });
 
 module.exports = app;

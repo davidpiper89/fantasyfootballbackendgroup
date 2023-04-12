@@ -68,11 +68,17 @@ module.exports = {
   },
 
   updateTeamName: () => {
-    return `UPDATE fantasy
-          JOIN logins
-          ON fantasy.user_id = logins.user_id
-          SET team_name = ?
-          WHERE token = ?;`;
+    return `INSERT INTO fantasy
+            (team_name)
+            VALUES
+            (?)`;
+  },
+
+    insertFantasyLineup: () => {
+    return `INSERT INTO line_up
+    (user_id, code)
+    VALUES
+    (?, ?)`;
   },
 
   forgotPassword: () => {
@@ -108,10 +114,5 @@ module.exports = {
     WHERE user_id = ?`;
   },
 
-  insertFantasyLineup: () => {
-    return `INSERT INTO line_up
-    (user_id, code, position)
-    VALUES
-    (?, ?, ?)`;
-  },
+
 };

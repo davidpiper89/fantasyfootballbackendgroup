@@ -53,7 +53,6 @@ app.use(
   auth,
   require("./routes/notificationEmails.js")
 );
-app.use("/updateTeamName", auth, require("./routes/updateTeamName"));
 app.use("/save", auth, require("./routes/save"));
 
 const port = process.env.PORT || 6001;
