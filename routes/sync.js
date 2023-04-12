@@ -1,51 +1,66 @@
 const express = require("express");
 const asyncMySQL = require("../mysql/connection");
-const app = express.Router();
 const axios = require("axios");
 const { selectUser, selectFantasy } = require("../mysql/queries");
 
-app.get("/", async (req, res) => {
-  //get user data from users
-  const [user] = await asyncMySQL(selectUser(), [req.user_id]);
+// Create an Express Router instance
+const app = express.Router();
 
-  //convert into bool
+// Define the route for the root path
+app.get("/", async (req, res) => {
+  // Check is user id is defined
+  if (!req.user_id) {
+    res.status(400).send({ status: 0, error: "User ID is not defined" });
+    return;
+  }
+  // Fetch user data, selected team, and fantasy table data
+  const userData = await getUserData(req.user_id);
+  const selectedTeam = await getSelectedTeam(req.user_id);
+  const fantasyTable = await getFantasyTable();
+
+  // Send the response with the fetched data
+  res.send({ status: 1, ...userData, selectedTeam, fantasyTable });
+});
+
+// Function to fetch user data and user fantasy team name for a given user ID
+async function getUserData(userId) {
+  const [user] = await asyncMySQL(selectUser(), [userId]);
   user.notificationEmails = user.notificationEmails === 1 ? true : false;
 
-  // const [fantasy] = await asyncMySQL(selectFantasy(), [req.user_id]);
+  const [fantasy] = await asyncMySQL(selectFantasy(), [userId]);
+  user.fantasy = { teamName: fantasy ? fantasy.teamName : '' }; // Set teamName to an empty string if fantasy is undefined
 
-  // //attach team name to fantasy and place inside users
-  // user.fantasy = { teamName: fantasy.teamName };
+  return { user };
+}
 
-  //get latest player data
+// Function to fetch selected team data for a given user ID
+async function getSelectedTeam(userId) {
+  // Fetch football data from external API
   const footballData = await axios.get(
     "https://fantasy.premierleague.com/api/bootstrap-static/"
   );
 
-  // get the user line up
-  const lineUp = await asyncMySQL(`SELECT code FROM line_up
-                                    WHERE user_id = ${req.user_id}`);
-
-  const lineUpList = [];
-  lineUp.forEach((element) => {
-    lineUpList.push(element.code);
-  });
-
-  const selectedTeam = footballData.data.elements.filter((item) => {
-    return lineUpList.includes(item.code);
-  });
-
-  //get the score deduction
-
-  const scoreDeduction = await asyncMySQL(`SELECT score_deduction FROM fantasy
-                                            WHERE user_id = ${req.user_id}`);
-
-  //get the userTable
-  const fantasyTable = await asyncMySQL(
-    `SELECT team_name, score_deduction, total_points FROM fantasy`
+  // Fetch line up data for the given user ID
+  const lineUp = await asyncMySQL(
+    `SELECT code FROM line_up WHERE user_id = ?`,
+    [userId]
   );
 
-  //send all the data
-  res.send({ status: 1, user, selectedTeam, fantasyTable });
-});
+  // Map the line up data to an array of player codes
+  const lineUpList = lineUp.map((element) => element.code);
 
+  // Filter the football data to return only the players in the user's line up
+  return footballData.data.elements.filter((item) => {
+    return lineUpList.includes(item.code);
+  });
+}
+
+// Function to fetch fantasy table data
+async function getFantasyTable() {
+  return await asyncMySQL(
+    `SELECT team_name, score_deduction, total_points FROM fantasy`
+  );
+}
+
+// Export the Express Router instance
 module.exports = app;

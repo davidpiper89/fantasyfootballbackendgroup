@@ -29,7 +29,7 @@ app.post("/", checkTokenHeader, async (req, res) => {
                           (?, ?, ?, ?)`, [req.user_id, payload.teamName, payload.scoreDeduction, Math.abs(payload.scoreDeduction)]);
 
 
-    console.log(Math.abs(payload.scoreDeduction));
+
 
     res.send({ status: 1 });
   } catch (error) {
