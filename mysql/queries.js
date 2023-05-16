@@ -74,7 +74,7 @@ module.exports = {
             (?)`;
   },
 
-    insertFantasyLineup: () => {
+  insertFantasyLineup: () => {
     return `INSERT INTO line_up
     (user_id, code)
     VALUES
@@ -86,7 +86,6 @@ module.exports = {
     SET password = ?
     WHERE email = ?;`;
   },
-
 
   selectUser: () => {
     return `SELECT email, 
@@ -110,5 +109,13 @@ module.exports = {
     WHERE user_id = ?`;
   },
 
-
+  selectLineUp: () => {
+    return `SELECT code FROM line_up WHERE user_id = ?`;
+  },
+  selectScoreDeduction: () => {
+    return `SELECT score_deduction FROM fantasy WHERE user_id = ?`;
+  },
+  selectTable: () => {
+    return `SELECT team_name, score_deduction, total_points from fantasy `
+  }
 };
