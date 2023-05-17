@@ -48,19 +48,22 @@ The backend provides API endpoints that can be accessed by the frontend applicat
 
 ## API Endpoints
 
-| Method | Endpoint                 | Description                               |
-| ------ | ------------------------ | ----------------------------------------- |
-| POST   | `/api/users/signup`      | Register a new user                       |
-| POST   | `/api/users/login`       | Authenticate and log in a user            |
-| GET    | `/api/users/:userId`     | Get user data                             |
-| PUT    | `/api/users/:userId`     | Update user data                          |
-| DELETE | `/api/users/:userId`     | Delete a user                             |
-| GET    | `/api/teams`             | Get all teams                             |
-| GET    | `/api/teams/:teamId`     | Get team data                             |
-| GET    | `/api/players`           | Get all players                           |
-| GET    | `/api/players/:playerId` | Get player data                           |
-| GET    | `/api/league`            | Get league standings                      |
-| GET    | `/api/userTeam`          | Get the user's fantasy football team data |
+| Method | Endpoint             | Description                                |
+| ------ | -------------------- | ------------------------------------------ |
+| GET    | /                    | Check server status                        |
+| GET    | /footballData        | Get football data                          |
+| POST   | /add                 | Add a new user                             |
+| POST   | /login               | Authenticate and log in a user             |
+| PATCH  | /forgot              | Handle forgotten password                  |
+| GET    | /sync                | Synchronize user data (requires auth)      |
+| GET    | /get                 | Get user data (requires auth)              |
+| DELETE | /delete              | Delete a user (requires auth)              |
+| PUT    | /update              | Update user data (requires auth)           |
+| POST   | /logout              | Log out a user (requires auth)             |
+| POST   | /addImage            | Add image (requires auth)                  |
+| POST   | /notification-emails | Manage notification emails (requires auth) |
+| POST   | /save                | Save user's progress (requires auth)       |
+| GET    | /points              | Get user's points (requires auth)          |
 
 ## Database Structure
 
